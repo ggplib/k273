@@ -1,0 +1,22 @@
+# temporary/backup files
+
+*~
+doc/_build
+
+# c++
+*.d
+*.o
+*.so
+
+# python
+*.pyc
+*__pycache__/
+
+# for pytest?
+.cache
+
+# log files
+*.log
+
+# binary files
+*.bin

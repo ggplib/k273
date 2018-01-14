@@ -1,0 +1,29 @@
+# common header file fo all makefiles
+
+# defines
+
+AR = ar
+RM = rm -f
+CP = cp
+
+# cpp version
+ifdef CPP_VERSION
+CPP = $(CPP_VERSION)
+else
+#CPP = clang++
+CPP = g++
+endif
+
+INCLUDE_PATH = $(K273_PATH)/src/
+LIB_PATH = $(K273_PATH)/lib/
+
+# profiles -pg, verbose -v
+# -Weffc++ XXX more warnings
+
+# XXX how many of these are relevant for compile versus link?
+CFLAGS = -fmax-errors=5 -MMD -MP -g -Wall -Werror -Woverloaded-virtual -Wnon-virtual-dtor -O3 -fomit-frame-pointer -march=native -mtune=native
+LDFLAGS = -g -MMD -MP -Wall -Werror -O3 -fomit-frame-pointer -march=native -mtune=native -pthread -lrt
+
+CX11FLAGS = $(CFLAGS) -std=c++11
+CX11FLAGS_FORLIBS = $(CX11FLAGS) -fPIC
+
