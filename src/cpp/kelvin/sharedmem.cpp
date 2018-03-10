@@ -1,9 +1,11 @@
 
 // local includes
-#include "k273/sharedmem.h"
-#include "k273/util.h"
-#include "k273/logging.h"
-#include "k273/exception.h"
+#include "kelvin/sharedmem.h"
+
+// k273 includes
+#include <k273/util.h>
+#include <k273/logging.h>
+#include <k273/exception.h>
 
 // std includes
 #include <string>

@@ -1,17 +1,8 @@
 
-INCLUDE_PATH = -I ../ -I /usr/include/jsoncpp
-LIB_PATH = ./
-
-AR = ar
-RM = rm -f
-CPP = g++
-
-CFLAGS = -MMD -MP -g -Wall -Werror -Woverloaded-virtual -Wnon-virtual-dtor -O3 -fPIC -fomit-frame-pointer -std=c++11
-LDFLAGS = -g -MMD -MP -Wall -Werror -Woverloaded-virtual -Wnon-virtual-dtor -O3 -fomit-frame-pointer -std=c++11
-
+include $(K273_PATH)/src/cpp/Makefile.in
 
 SRCS += exception.cpp logging.cpp util.cpp strutils.cpp stacktrace.cpp json.cpp
-SRCS += inplist.cpp parseargs.cpp sharedmem.cpp socket.cpp
+SRCS += inplist.cpp parseargs.cpp
 
 CORE_OBJS = $(patsubst %.cpp, %.o, $(SRCS))
 OBJS := $(CORE_OBJS)
@@ -27,7 +18,7 @@ libk273.so: $(OBJS)
 	$(CPP) -shared $(CORE_OBJS) $(LDFLAGS) -L $(LIB_PATH) -pthread -lrt -ljsoncpp -o $@
 
 %.o : %.cpp
-	$(CPP) $(INCLUDE_PATH) $(CFLAGS) -c -o $@ $<
+	$(CPP) $(INCLUDE_PATHS) $(CFLAGS_FORLIBS) -c -o $@ $<
 
 # Cleans
 clean :

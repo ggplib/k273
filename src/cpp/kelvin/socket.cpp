@@ -1,8 +1,10 @@
 
 // local includes
-#include "k273/socket.h"
-#include "k273/logging.h"
-#include "k273/exception.h"
+#include "kelvin/socket.h"
+
+// k273 includes
+#include <k273/logging.h>
+#include <k273/exception.h>
 
 // std includes
 #include <cerrno>
