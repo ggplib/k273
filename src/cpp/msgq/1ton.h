@@ -9,10 +9,7 @@
 #include <cstring>
 #include <atomic>
 
-///////////////////////////////////////////////////////////////////////////////////
-
-namespace K273 {
-namespace QueueOneToMany {
+namespace K273::MsgQ::OneToMany {
 
     ///////////////////////////////////////////////////////////////////////////////
 
@@ -264,5 +261,4 @@ namespace QueueOneToMany {
         size_t internal_consume_index;
     };
 
-}
 }

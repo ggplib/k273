@@ -6,9 +6,7 @@
 #include "kelvin/scheduler.h"
 #include "kelvin/bytebuffer.h"
 
-namespace K273 {
-
-    namespace Streamer {
+namespace K273::Kelvin::Streamer {
 
     ///////////////////////////////////////////////////////////////////////////
     // Forwards
@@ -101,7 +99,4 @@ namespace K273 {
         bool logically_connected;
     };
 
-    ///////////////////////////////////////////////////////////////////////////
-
-    }
 }

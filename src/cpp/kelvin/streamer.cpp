@@ -18,7 +18,7 @@
 
 using namespace std;
 using namespace K273;
-using namespace K273::Streamer;
+using namespace K273::Kelvin::Streamer;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -61,7 +61,7 @@ void StreamHandler::doRead(SelectionKey* key) {
     try {
         count = this->sock->recv(ptbuf, this->inbuf.remaining());
 
-    } catch (const K273::SocketError& exc) {
+    } catch (const K273::Kelvin::SocketError& exc) {
         K273::l_info("Error reading from socket (fd=%d) in %s :\n  %s",
                this->sock->fileno(), this->protocol->repr().c_str(),
                exc.getMessage().c_str());
@@ -106,7 +106,7 @@ void StreamHandler::doWrite(SelectionKey* key) {
             count = this->sock->send(this->outbuf.getInternalBuf(),
                                      this->outbuf.remaining());
 
-        } catch (const K273::SocketError& exc) {
+        } catch (const K273::Kelvin::SocketError& exc) {
             K273::l_warning("Error writing to socket (fd=%d) in %s :\n  %s",
                             this->sock->fileno(), this->protocol->repr().c_str(),
                             exc.getMessage().c_str());
@@ -168,7 +168,7 @@ void StreamHandler::write(const char* data, int size) {
         try {
             written_count = this->sock->send(data, size);
 
-        } catch (const K273::SocketError& exc) {
+        } catch (const K273::Kelvin::SocketError& exc) {
             K273::l_warning("Error writing to socket (fd=%d) in %s :\n  %s",
                             this->sock->fileno(), this->protocol->repr().c_str(),
                             exc.getMessage().c_str());
@@ -203,7 +203,7 @@ void StreamHandler::setReadTimeout(int timeout_secs) {
     }
 }
 
-ConnectedSocket* StreamHandler::getSocket() {
+K273::Kelvin::ConnectedSocket* StreamHandler::getSocket() {
     ASSERT (this->isConnected());
     return this->sock;
 }
@@ -318,7 +318,7 @@ void StreamProtocol::setReadTimeout(int timeout_secs) {
     this->handler->setReadTimeout(timeout_secs);
 }
 
-ConnectedSocket* StreamProtocol::getSocket() {
+K273::Kelvin::ConnectedSocket* StreamProtocol::getSocket() {
     if (this->handler->isConnected()) {
         return this->handler->getSocket();
     } else {

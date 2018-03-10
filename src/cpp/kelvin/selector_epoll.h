@@ -4,7 +4,7 @@
 // std includes
 #include <sys/epoll.h>
 
-namespace K273 {
+namespace K273::Kelvin {
 
     class EPollSelector : public Selector {
       public:

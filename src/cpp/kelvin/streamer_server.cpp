@@ -20,7 +20,8 @@
 
 using namespace std;
 using namespace K273;
-using namespace K273::Streamer;
+using namespace K273::Kelvin;
+using namespace K273::Kelvin::Streamer;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -55,7 +56,7 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class K273::Streamer::ServerHandler : public EventHandler {
+class K273::Kelvin::Streamer::ServerHandler : public EventHandler {
 public:
     ServerHandler(Server* server);
     virtual ~ServerHandler();

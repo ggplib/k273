@@ -6,7 +6,7 @@
 // std includes
 #include <string>
 
-namespace K273 {
+namespace K273::Kelvin {
 
     class SharedMemory : public NonCopyable {
       public:

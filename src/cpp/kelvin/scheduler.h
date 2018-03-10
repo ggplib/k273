@@ -8,7 +8,7 @@
 #include <vector>
 #include <cstdint>
 
-namespace K273 {
+namespace K273::Kelvin {
 
     ///////////////////////////////////////////////////////////////////////////
     // Forwards
@@ -230,9 +230,9 @@ namespace K273 {
 
 #define DEFERRED(classname, class_t, fn, args...)                       \
                                                                         \
-class classname : public K273::Deferred {                               \
+class classname : public K273::Kelvin::Deferred {                       \
 public:                                                                 \
-    classname(K273::Scheduler* scheduler, class_t* parent) :            \
+    classname(K273::Kelvin::Scheduler* scheduler, class_t* parent) :    \
         Deferred(scheduler, ## args),                                   \
         parent(parent) {                                                \
     }                                                                   \

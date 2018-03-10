@@ -10,8 +10,7 @@
 // std includes
 #include <list>
 
-namespace K273 {
-namespace Streamer {
+namespace K273::Kelvin::Streamer {
 
     ///////////////////////////////////////////////////////////////////////////
     // Forwards
@@ -78,5 +77,4 @@ namespace Streamer {
         virtual void onConnectFailed(const std::string& msg);
     };
 
-}
 }

@@ -17,7 +17,7 @@
 // XXX Why this max???
 #define SELECTOR_MAX_FDS 128
 
-namespace K273 {
+namespace K273::Kelvin {
 
     ///////////////////////////////////////////////////////////////////////////
     // forwards

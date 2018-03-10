@@ -9,7 +9,7 @@
 #include <netinet/in.h>
 #include <vector>
 
-namespace K273 {
+namespace K273::Kelvin {
 
     class SocketError: public SysException {
       public:

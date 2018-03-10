@@ -8,10 +8,7 @@
 // std includes
 #include <cstring>
 
-///////////////////////////////////////////////////////////////////////////////////
-
-namespace K273 {
-  namespace QueueManyToOne {
+namespace K273::MsgQ::ManyToOne {
 
     ///////////////////////////////////////////////////////////////////////////////
 
@@ -285,5 +282,5 @@ namespace K273 {
         // pointer to first reserved block
         CacheLine* reserved;
     };
-  }
+
 }

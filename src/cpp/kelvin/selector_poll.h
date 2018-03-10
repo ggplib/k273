@@ -4,7 +4,7 @@
 // std includes
 #include <poll.h>
 
-namespace K273 {
+namespace K273::Kelvin {
 
     class PollSelector : public Selector {
       public:

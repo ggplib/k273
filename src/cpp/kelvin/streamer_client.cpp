@@ -20,7 +20,8 @@
 
 using namespace std;
 using namespace K273;
-using namespace K273::Streamer;
+using namespace K273::Kelvin;
+using namespace K273::Kelvin::Streamer;
 
 ///////////////////////////////////////////////////////////////////////////////
 
