@@ -22,7 +22,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 using namespace std;
-using namespace K273::Kelvin;
+using namespace Kelvin;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -54,19 +54,19 @@ SharedMemory* SharedMemory::create(const string& name, size_t size) {
     int fd = ::shm_open(name.c_str(), O_RDWR | O_CREAT | O_EXCL, 0666);
 
     if (fd == -1) {
-        throw SysException("SharedMemory::create() - failed shm_open()", errno);
+        throw K273::SysException("SharedMemory::create() - failed shm_open()", errno);
     }
 
     if (::ftruncate(fd, size) == -1) {
         ::close(fd);
-        throw SysException("SharedMemory::create() - failed ftruncate()", errno);
+        throw K273::SysException("SharedMemory::create() - failed ftruncate()", errno);
     }
 
     void* pt_mem = ::mmap(0, size, PROT_WRITE, MAP_SHARED, fd, 0);
 
     if (pt_mem == MAP_FAILED) {
         ::close(fd);
-        throw SysException("SharedMemory::create() - failed mmap()", errno);
+        throw K273::SysException("SharedMemory::create() - failed mmap()", errno);
     }
 
     K273::l_debug("SharedMemory::create() create shared memory [%s], total size %zu",
@@ -79,14 +79,14 @@ SharedMemory* SharedMemory::attach(const string& name, size_t size) {
     int fd = ::shm_open(name.c_str(), O_RDWR, 0666);
 
     if (fd == -1) {
-        throw SysException("SharedMemory::create() - failed shm_open()", errno);
+        throw K273::SysException("SharedMemory::create() - failed shm_open()", errno);
     }
 
     void* pt_mem = ::mmap(0, size, PROT_WRITE, MAP_SHARED, fd, 0);
 
     if (pt_mem == MAP_FAILED) {
         ::close(fd);
-        throw SysException("SharedMemory::create() - failed mmap()", errno);
+        throw K273::SysException("SharedMemory::create() - failed mmap()", errno);
     }
 
     ::close(fd);

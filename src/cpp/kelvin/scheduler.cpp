@@ -16,7 +16,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 using namespace std;
-using namespace K273::Kelvin;
+using namespace Kelvin;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -154,7 +154,7 @@ InterruptHandler::InterruptHandler(Scheduler* scheduler) :
     sigaddset(&this->sset, SIGTERM);
     sigprocmask(SIG_BLOCK, &this->sset, nullptr);
     if ((this->sfd = signalfd(-1, &sset, 0)) == -1) {
-        throw SysException("creating signalfd()", errno);
+        throw K273::SysException("creating signalfd()", errno);
     }
 }
 
@@ -170,7 +170,7 @@ void InterruptHandler::doRead(SelectionKey* key) {
 
     int bytes = read(this->sfd, &info, sizeof(struct signalfd_siginfo));
     if (bytes < 0) {
-        throw SysException("Failed to read from sfd", errno);
+        throw K273::SysException("Failed to read from sfd", errno);
     }
 
     ASSERT(bytes == sizeof(struct signalfd_siginfo));

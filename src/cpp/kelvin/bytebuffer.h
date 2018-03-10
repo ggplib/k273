@@ -1,7 +1,5 @@
 #pragma once
 
-// local includes
-
 // k273 includes
 #include <k273/exception.h>
 
@@ -11,17 +9,17 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-namespace K273::Kelvin {
+namespace Kelvin {
 
     class ByteBuffer;
 
-    class BufferUnderflow: public Exception {
+    class BufferUnderflow: public K273::Exception {
     public:
         BufferUnderflow(ByteBuffer* buf);
         virtual ~BufferUnderflow();
     };
 
-    class BufferOverflow: public Exception {
+    class BufferOverflow: public K273::Exception {
     public:
         BufferOverflow(ByteBuffer* buf);
         virtual ~BufferOverflow();

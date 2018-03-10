@@ -10,7 +10,7 @@
 // std includes
 #include <list>
 
-namespace K273::Kelvin::Streamer {
+namespace Kelvin::Streamer {
 
     ///////////////////////////////////////////////////////////////////////////
     // Forwards

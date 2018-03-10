@@ -6,9 +6,9 @@
 // std includes
 #include <string>
 
-namespace K273::Kelvin {
+namespace Kelvin {
 
-    class SharedMemory : public NonCopyable {
+    class SharedMemory : public K273::NonCopyable {
       public:
         // Will create / recrete if exists.  Takes ownership if creates and if so: destructor
         // responsbile for cleaning up

@@ -25,7 +25,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 using namespace std;
-using namespace K273::Kelvin;
+using namespace Kelvin;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -552,7 +552,7 @@ ConnectedSocket *UnixAcceptingSocket::createSocket(int fd) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-ConnectedSocket* K273::Kelvin::udpReadSocket(const string& ipaddr, int port, const string& ifn) {
+ConnectedSocket* Kelvin::udpReadSocket(const string& ipaddr, int port, const string& ifn) {
     /* Given a ip address and port, create a bound udp socket for reading. */
 
     K273::l_debug("binding to %s:%d on %s", ipaddr.c_str(), port, ifn.size() == 0 ? "any" : ifn.c_str());
@@ -587,7 +587,7 @@ ConnectedSocket* K273::Kelvin::udpReadSocket(const string& ipaddr, int port, con
     return s;
 }
 
-ConnectedSocket* K273::Kelvin::udpWriteSocket(const string& ipaddr, int port, bool broadcast) {
+ConnectedSocket* Kelvin::udpWriteSocket(const string& ipaddr, int port, bool broadcast) {
     /* Given a ip address and port, create a connected udp socket for writing. */
 
     // Create the address and socket
@@ -615,8 +615,8 @@ ConnectedSocket* K273::Kelvin::udpWriteSocket(const string& ipaddr, int port, bo
     return s;
 }
 
-ConnectedSocket* K273::Kelvin::multicastSocket(const string& group,
-                                               int port, const string& ifn) {
+ConnectedSocket* Kelvin::multicastSocket(const string& group,
+                                         int port, const string& ifn) {
 
     K273::l_debug("joining multicast group %s:%d on %s",
                   group.c_str(), port, ifn.size() == 0 ? "any" : ifn.c_str());
@@ -660,9 +660,8 @@ ConnectedSocket* K273::Kelvin::multicastSocket(const string& group,
     return s;
 }
 
-ConnectedSocket* K273::Kelvin::multicastWriteSocket(const string& group,
-                                                    int port,
-                                                    const string& ifn) {
+ConnectedSocket* Kelvin::multicastWriteSocket(const string& group,
+                                              int port, const string& ifn) {
 
     K273::l_debug("connecting to multicast %s:%d via %s",
                   group.c_str(), port, ifn.size() == 0 ? "any" : ifn.c_str());

@@ -9,9 +9,9 @@
 #include <netinet/in.h>
 #include <vector>
 
-namespace K273::Kelvin {
+namespace Kelvin {
 
-    class SocketError: public SysException {
+    class SocketError: public K273::SysException {
       public:
         SocketError(const std::string& msg);
         virtual ~SocketError();

@@ -8,7 +8,7 @@
 // std includes
 #include <cstring>
 
-namespace K273::MsgQ::ManyToOne {
+namespace Kelvin::MsgQ::ManyToOne {
 
     ///////////////////////////////////////////////////////////////////////////////
 
@@ -34,7 +34,7 @@ namespace K273::MsgQ::ManyToOne {
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    class Memory : NonCopyable {
+    class Memory : K273::NonCopyable {
     public:
         CacheLine* getCacheLine(size_t index) {
             return this->buf + index;
@@ -62,7 +62,7 @@ namespace K273::MsgQ::ManyToOne {
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    class Producer : NonCopyable {
+    class Producer : K273::NonCopyable {
     public:
         Producer(const size_t queue_size) :
             mem(nullptr),
@@ -133,7 +133,7 @@ namespace K273::MsgQ::ManyToOne {
             // so far so good, now reserve this for our own devices
             if (unlikely(__sync_val_compare_and_swap(&this->mem->write_index, acquire_index, goal_index) != acquire_index)) {
                 // boo, failed
-                l_debug("race condition reserving block %lu %lu", acquire_index, goal_index);
+                K273::l_debug("race condition reserving block %lu %lu", acquire_index, goal_index);
                 return nullptr;
             }
 
@@ -179,7 +179,7 @@ namespace K273::MsgQ::ManyToOne {
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    class Consumer : NonCopyable {
+    class Consumer : K273::NonCopyable {
 
     public:
         Consumer(const size_t queue_size) :

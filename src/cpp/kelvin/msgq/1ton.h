@@ -9,7 +9,7 @@
 #include <cstring>
 #include <atomic>
 
-namespace K273::MsgQ::OneToMany {
+namespace Kelvin::MsgQ::OneToMany {
 
     ///////////////////////////////////////////////////////////////////////////////
 
@@ -35,7 +35,7 @@ namespace K273::MsgQ::OneToMany {
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    class Memory : NonCopyable {
+    class Memory : K273::NonCopyable {
     public:
         // modulo 2 calculations:
         // basically as long as QUEUE_SIZE is of power of 2, the following works
@@ -68,7 +68,7 @@ namespace K273::MsgQ::OneToMany {
     // prevent such a client falling so far behind that it breaks, is having an
     // sufficiently large queue.
 
-    class Producer : NonCopyable {
+    class Producer : K273::NonCopyable {
 
     public:
         Producer(const size_t queue_size) :
@@ -180,7 +180,7 @@ namespace K273::MsgQ::OneToMany {
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    class Consumer : NonCopyable {
+    class Consumer : K273::NonCopyable {
 
     public:
         Consumer(const size_t queue_size) :

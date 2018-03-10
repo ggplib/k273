@@ -14,7 +14,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 using namespace std;
-using namespace K273::Kelvin;
+using namespace Kelvin;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -98,7 +98,7 @@ int PollSelector::doSelect(int timeout_msecs) {
             return 0;
         }
 
-        throw SysException("An error occurred during poll()", errno);
+        throw K273::SysException("An error occurred during poll()", errno);
     }
 
     if (_debug_log) {

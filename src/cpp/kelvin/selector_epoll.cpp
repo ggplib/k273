@@ -17,7 +17,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 using namespace std;
-using namespace K273::Kelvin;
+using namespace Kelvin;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -100,7 +100,7 @@ void EPollSelector::finalizeInterest(SelectionKey* ptkey) {
             return;
         }
 
-        throw SysException("An error occurred during epoll_ctl()", errno);
+        throw K273::SysException("An error occurred during epoll_ctl()", errno);
     }
 }
 
@@ -129,7 +129,7 @@ int EPollSelector::doSelect(int timeout_msecs) {
             return 0;
         }
 
-        throw SysException("An error occurred during epoll()", errno);
+        throw K273::SysException("An error occurred during epoll()", errno);
     }
 
     ASSERT (ready_count <= SELECTOR_MAX_FDS);
@@ -185,6 +185,6 @@ void EPollSelector::updateEpollEvent(SelectionKey* ptkey, bool add_flag) {
             return;
         }
 
-        throw SysException("An error occurred during epoll_ctl()", errno);
+        throw K273::SysException("An error occurred during epoll_ctl()", errno);
     }
 }

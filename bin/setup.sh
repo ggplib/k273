@@ -6,3 +6,5 @@ else
     echo "K273 set to" $K273_PATH
 fi
 
+export LD_LIBRARY_PATH=$K273_PATH/build/lib:$LD_LIBRARY_PATH
+

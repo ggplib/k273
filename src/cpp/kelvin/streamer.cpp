@@ -17,8 +17,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 using namespace std;
-using namespace K273;
-using namespace K273::Kelvin::Streamer;
+using namespace Kelvin::Streamer;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -61,7 +60,7 @@ void StreamHandler::doRead(SelectionKey* key) {
     try {
         count = this->sock->recv(ptbuf, this->inbuf.remaining());
 
-    } catch (const K273::Kelvin::SocketError& exc) {
+    } catch (const Kelvin::SocketError& exc) {
         K273::l_info("Error reading from socket (fd=%d) in %s :\n  %s",
                this->sock->fileno(), this->protocol->repr().c_str(),
                exc.getMessage().c_str());
@@ -106,7 +105,7 @@ void StreamHandler::doWrite(SelectionKey* key) {
             count = this->sock->send(this->outbuf.getInternalBuf(),
                                      this->outbuf.remaining());
 
-        } catch (const K273::Kelvin::SocketError& exc) {
+        } catch (const Kelvin::SocketError& exc) {
             K273::l_warning("Error writing to socket (fd=%d) in %s :\n  %s",
                             this->sock->fileno(), this->protocol->repr().c_str(),
                             exc.getMessage().c_str());
@@ -168,7 +167,7 @@ void StreamHandler::write(const char* data, int size) {
         try {
             written_count = this->sock->send(data, size);
 
-        } catch (const K273::Kelvin::SocketError& exc) {
+        } catch (const Kelvin::SocketError& exc) {
             K273::l_warning("Error writing to socket (fd=%d) in %s :\n  %s",
                             this->sock->fileno(), this->protocol->repr().c_str(),
                             exc.getMessage().c_str());
@@ -203,7 +202,7 @@ void StreamHandler::setReadTimeout(int timeout_secs) {
     }
 }
 
-K273::Kelvin::ConnectedSocket* StreamHandler::getSocket() {
+Kelvin::ConnectedSocket* StreamHandler::getSocket() {
     ASSERT (this->isConnected());
     return this->sock;
 }
@@ -225,7 +224,7 @@ void StreamHandler::updateReadTimeout() {
     if (this->timeout_secs > 0) {
 
         // fudge it, so we don't recreate this timer excessive
-        double current_time = get_time();
+        double current_time = K273::get_time();
         if (current_time < this->last_update_read_time_at + 0.5) {
             return;
         }
@@ -318,7 +317,7 @@ void StreamProtocol::setReadTimeout(int timeout_secs) {
     this->handler->setReadTimeout(timeout_secs);
 }
 
-K273::Kelvin::ConnectedSocket* StreamProtocol::getSocket() {
+Kelvin::ConnectedSocket* StreamProtocol::getSocket() {
     if (this->handler->isConnected()) {
         return this->handler->getSocket();
     } else {

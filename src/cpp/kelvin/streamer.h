@@ -6,7 +6,7 @@
 #include "kelvin/scheduler.h"
 #include "kelvin/bytebuffer.h"
 
-namespace K273::Kelvin::Streamer {
+namespace Kelvin::Streamer {
 
     ///////////////////////////////////////////////////////////////////////////
     // Forwards

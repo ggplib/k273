@@ -1,32 +1,31 @@
-
 include $(K273_PATH)/src/cpp/Makefile.in
 
 SRCS += connector.cpp other.cpp
+OBJS := $(patsubst %.cpp, %.o, $(SRCS))
+DEPS = $(SRCS:.cpp=.d)
 
-CORE_OBJS = $(patsubst %.cpp, %.o, $(SRCS))
-OBJS := $(CORE_OBJS)
-DEPS=$(SRCS:.cpp=.d)
+OBJS := $(patsubst %.cpp, %.o, $(SRCS))
+DEPS = $(SRCS:.cpp=.d)
+
+LIB_NAME = libk273_orbit.so
 
 # Top level
-all: $(OBJS) libk273_orbit.so
-
-fresh : clean all
+all: $(OBJS) $(LIB_NAME)
 
 # Compiles
-libk273_orbit.so: $(OBJS)
-	$(CPP) -shared $(CORE_OBJS) $(LDFLAGS) -L $(LIB_PATH) -pthread -lrt -ljsoncpp -o $@
+$(LIB_NAME): $(OBJS)
+	$(CPP) -shared $(CORE_OBJS) $(LDFLAGS) -L $(LIB_PATH) -pthread -lrt -o $@
 
 %.o : %.cpp
 	$(CPP) $(INCLUDE_PATHS) $(CFLAGS_FORLIBS) -c -o $@ $<
 
+# Install
+install:
+	$(CP) $(LIB_NAME) $(INSTALL_LIB_PATH)
+
 # Cleans
 clean :
-	$(RM) $(OBJS) $(DEPS)
-
-realclean : clean
-	$(RM) *.so *.log core*
+	$(RM) $(OBJS) $(DEPS) $(LIB_NAME)
 
 -include $(DEPS)
-.PHONY: all fresh clean realclean
-
-
+.PHONY: all clean

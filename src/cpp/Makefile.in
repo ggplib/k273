@@ -3,26 +3,23 @@
 # defines
 
 INCLUDE_PATHS = -I $(K273_PATH)/src/cpp/ -I /usr/include/jsoncpp
-LIB_PATHS = -L $(K273_PATH)/src/cpp/
-
+INSTALL_LIB_PATH = $(K273_PATH)/build/lib
 
 AR = ar
 RM = rm -f
 CP = cp
+MKDIR = mkdir -p
 
 # cpp version
 ifdef CPP_VERSION
 CPP = $(CPP_VERSION)
 else
-#CPP = clang++
 CPP = g++
 endif
 
 # profiles -pg, verbose -v
-# -Weffc++ XXX more warnings
 
-# XXX how many of these are relevant for compile versus link?
-CFLAGS = -fmax-errors=5 -MMD -MP -g -Wall -Werror -Woverloaded-virtual -Wnon-virtual-dtor -O3 -fomit-frame-pointer -march=native -mtune=native -std=c++14
+CFLAGS = -fmax-errors=5 -MMD -MP -g -Wall -Werror -Woverloaded-virtual -Wnon-virtual-dtor -O3 -fomit-frame-pointer -march=native -mtune=native -std=c++17
 LDFLAGS = -g -MMD -MP -Wall -Werror -O3 -fomit-frame-pointer -march=native -mtune=native -pthread -lrt
 
 CFLAGS_FORLIBS = $(CFLAGS) -fPIC

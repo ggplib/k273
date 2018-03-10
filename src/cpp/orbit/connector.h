@@ -12,14 +12,14 @@
 
 namespace K273::Orbit {
 
-    class Connector : public K273::Kelvin::Streamer::ConnectingProtocol {
+    class Connector : public Kelvin::Streamer::ConnectingProtocol {
 
     public:
-        Connector(K273::Kelvin::Streamer::ConnectorBase*, int orbit_client_id);
+        Connector(Kelvin::Streamer::ConnectorBase*, int orbit_client_id);
         virtual ~Connector();
 
     public:
-        virtual void onBuffer(K273::Kelvin::ByteBuffer&);
+        virtual void onBuffer(Kelvin::ByteBuffer&);
 
         void onMessage(Connection::MessageHeader*);
         void handleInitialiseClient(Connection::InitialiseClientMessage*);

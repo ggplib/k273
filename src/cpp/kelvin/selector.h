@@ -17,7 +17,7 @@
 // XXX Why this max???
 #define SELECTOR_MAX_FDS 128
 
-namespace K273::Kelvin {
+namespace Kelvin {
 
     ///////////////////////////////////////////////////////////////////////////
     // forwards
@@ -32,7 +32,7 @@ namespace K273::Kelvin {
 
     ///////////////////////////////////////////////////////////////////////////
 
-    class SelectorError: public Exception {
+    class SelectorError: public K273::Exception {
       public:
         SelectorError(const std::string &msg);
         virtual ~SelectorError();
