@@ -20,3 +20,6 @@ doc/_build
 
 # binary files
 *.bin
+
+3rd/
+build/
