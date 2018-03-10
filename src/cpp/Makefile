@@ -1,17 +1,12 @@
 # Top level makefile.
 
-all: build
-
-fresh : clean build
-
-clean: clean-libs
-build : libs
-
 # Faster builds.
 MAKE = nice make
 BUILD_CORES=-j4
 
 all: libs
+
+fresh : clean all
 
 libs:
 	echo "*** libs"
@@ -20,14 +15,14 @@ libs:
 	$(MAKE) -C msgq $(BUILD_CORES) all
 
 
-clean-libs:
+clean:
 	echo "*** clean-libs"
 	$(MAKE) -C k273 clean
 	$(MAKE) -C kelvin clean
 	$(MAKE) -C msgq clean
 
 
-realclean-libs:
+realclean:
 	echo "*** realclean-libs"
 	$(MAKE) -C k273 realclean
 	$(MAKE) -C kelvin realclean
