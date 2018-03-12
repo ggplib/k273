@@ -2,7 +2,7 @@
 
 // std includes
 #include <string>
-#include <list>
+#include <vector>
 
 namespace K273 {
 
@@ -26,7 +26,7 @@ namespace K273 {
     bool startsWith(const std::string& input, const std::string& match);
 
     // returns a list of strings - not sure very efficient
-    std::list <std::string> split(std::string input, char c=' ');
+    std::vector <std::string> split(std::string input, char c=' ');
 
     int find(const std::string& input, const std::string& what);
 
@@ -35,6 +35,9 @@ namespace K273 {
     long long toLongLong(const std::string& input);
     double toDouble(const std::string& input);
     bool toBool(const std::string& input);
+
+    // return list of files and directories in path.
+    std::vector <std::string> listdir(const std::string& path);
 
 }
 

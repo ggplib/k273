@@ -1,11 +1,16 @@
-
 // k273 includes
 #include <k273/inplist.h>
 #include <k273/exception.h>
 #include <k273/logging.h>
 
-using namespace std;
+// std includes
+#include <string>
+#include <vector>
+
 using namespace K273;
+
+
+///////////////////////////////////////////////////////////////////////////////
 
 class BlaBla : public InplaceListEntry {
   public:
@@ -286,7 +291,7 @@ void test_iteration() {
     test_##name();                              \
     printf("done\n");
 
-void run(vector <string>& args) {
+void run(std::vector <std::string>& args) {
     TEST(creation);
     TEST(insertRemove);
     TEST(insertBefore);
@@ -299,7 +304,7 @@ void run(vector <string>& args) {
 
 int main(int argc, char** argv) {
     K273::Runner::Config config(argc, argv);
-    config.log_filename = "inplist.log";
+    config.log_filename = "inplist_test.log";
 
     return K273::Runner::Main(run, config);
 }

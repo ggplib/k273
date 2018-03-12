@@ -1,10 +1,15 @@
-// std includes
-#include <cstring>
-#include <stdarg.h>
-
 // local includes
 #include "k273/exception.h"
 #include "k273/strutils.h"
+
+// std includes
+#include <list>
+#include <string>
+#include <cstring>
+
+#include <stdarg.h>
+#include <sys/types.h>
+#include <dirent.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -258,8 +263,8 @@ bool K273::toBool(const string &input) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-list <string> K273::split(string input, char c) {
-    list <string> result;
+vector <string> K273::split(string input, char c) {
+    vector <string> result;
 
     bool good = false;
     const char* ptchar = input.c_str();
@@ -283,4 +288,29 @@ list <string> K273::split(string input, char c) {
     }
 
     return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+vector <string> K273::listdir(const string& path) {
+    vector <string> res;
+
+    DIR* dir = ::opendir(path.c_str());
+    if (dir == NULL) {
+        throw SysException("opendir failed", errno);
+    }
+
+    dirent* entry = readdir(dir);
+    while (entry != NULL) {
+        res.emplace_back(entry->d_name, ::strlen(entry->d_name));
+
+        // do next...
+        entry = readdir(dir);
+    }
+
+    if (entry == NULL && errno) {
+        throw SysException("readdir failed", errno);
+    }
+
+    return res;
 }

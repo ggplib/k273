@@ -21,7 +21,7 @@ $(LIB_NAME): $(OBJS)
 	$(CPP) $(INCLUDE_PATHS) $(CFLAGS_FORLIBS) -c -o $@ $<
 
 # Install
-install:
+install: $(LIB_NAME)
 	$(CP) $(LIB_NAME) $(INSTALL_LIB_PATH)
 
 # Cleans

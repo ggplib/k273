@@ -1,7 +1,15 @@
+// k273 includes
+#include <k273/inplist.h>
+#include <k273/exception.h>
+#include <k273/logging.h>
 
-#include <kelvin.h>
-#include <kelvin/main.h>
+// std includes
+#include <string>
+#include <vector>
 #include <iostream>
+
+
+using namespace K273;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -22,11 +30,11 @@ void test_throwing1() {
                 case 1:
                     throw Exception("Description here 1");
                 case 2:
-                    throw Exception(String("Description here 2"));
+                    throw Exception(std::string("Description here 2"));
                 case 3:
                     throw SysException("Description here 3", 3);
                 case 4:
-                    throw SysException(String("Description here 4"), 4);
+                    throw SysException(std::string("Description here 4"), 4);
                 case 5:
                     throw Assertion(5, "File 5", "5 == 5");
                 case 6:
@@ -41,17 +49,17 @@ void test_throwing1() {
             }
 
         } catch (const Assertion &exc) {
-            std::cerr << ii << " Assertion &exc " << exc.getMessage().getBuf() << std::endl;
-            std::cerr << "  File = " << exc.getFile().getBuf() << std::endl;
+            std::cerr << ii << " Assertion &exc " << exc.getMessage() << std::endl;
+            std::cerr << "  File = " << exc.getFile() << std::endl;
             std::cerr << "  Line = " << exc.getLine() << std::endl;
 
         } catch (const SysException &exc) {
-            std::cerr << ii << " SysException &exc " << exc.getMessage().getBuf() << std::endl;
+            std::cerr << ii << " SysException &exc " << exc.getMessage() << std::endl;
             std::cerr << "  Get error code = " << exc.getErrorCode() << std::endl;
-            std::cerr << "  Get error string = " << exc.getErrorString().getBuf() << std::endl;
+            std::cerr << "  Get error string = " << exc.getErrorString() << std::endl;
 
         } catch (const Exception &exc) {
-            std::cerr << ii << " Exception &exc " << exc.getMessage().getBuf() << std::endl;
+            std::cerr << ii << " Exception &exc " << exc.getMessage() << std::endl;
 
         } catch (...) {
             std::cerr << ii << " Unknown exception caught." << std::endl;
@@ -73,11 +81,11 @@ void test_throwing2() {
                 case 1:
                     throw Exception("Description here 1");
                 case 2:
-                    throw Exception(String("Description here 2"));
+                    throw Exception(std::string("Description here 2"));
                 case 3:
                     throw SysException("Description here 3", 3);
                 case 4:
-                    throw SysException(String("Description here 4"), 4);
+                    throw SysException(std::string("Description here 4"), 4);
                 case 5:
                     throw Assertion(5, "File 5", "5 == 5");
                 case 6:
@@ -92,7 +100,7 @@ void test_throwing2() {
             }
 
         } catch (const Exception &exc) {
-            std::cerr << ii << " Exception &exc " << exc.getMessage().getBuf() << std::endl;
+            std::cerr << ii << " Exception &exc " << exc.getMessage() << std::endl;
 
         } catch (...) {
             std::cerr << ii << " Unknown exception caught." << std::endl;
@@ -155,7 +163,7 @@ void test_asserting() {
                     throw "asdas";
             }
         } catch (const Assertion &exc) {
-            std::cerr << ii << " Assertion &exc " << exc.getMessage().getBuf() << std::endl;
+            std::cerr << ii << " Assertion &exc " << exc.getMessage() << std::endl;
 
         } catch (...) {
             std::cerr << "Unknown exception caught." << std::endl;
@@ -165,14 +173,24 @@ void test_asserting() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#define TEST(name)                              \
+#define TEST(name)                                   \
     std::cerr << " --> test_" << #name << "()... ";  \
-    test_##name();                              \
+    test_##name();                                   \
     std::cerr << "done" << std::endl;
 
-void Main(const Strings &args) {
-    initializeDev(args);
+
+void run(std::vector <std::string>& args) {
     TEST(throwing1);
     TEST(throwing2);
     TEST(asserting);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+#include <k273/runner.h>
+
+int main(int argc, char** argv) {
+    K273::Runner::Config config(argc, argv);
+    config.log_filename = "exception_test.log";
+    return K273::Runner::Main(run, config);
 }
