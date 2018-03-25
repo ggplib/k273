@@ -1,13 +1,13 @@
-//#define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
-//#include "catch.hpp"
 
 // k273 includes
 #include <k273/strutils.h>
 #include <k273/exception.h>
 
 // 3rd party
+#include <catch.hpp>
+#include <fmt/format.h>
+#include <fmt/printf.h>
 #include <range/v3/all.hpp>
-
 
 // std includes
 #include <vector>
@@ -18,81 +18,68 @@
 #include <unistd.h>
 
 
-void test_listdir_basic_1() {
+TEST_CASE("listdir() basic - /tmp", "[listdir_basic_tmp_dir]") {
     const auto files = K273::listdir("/tmp");
-
-    ASSERT(files.size() > 0);
-
-    std::cout << "OK" << std::endl;
+    REQUIRE(files.size() > 0);
 }
 
 
-void test_listdir_basic_2() {
+TEST_CASE("listdir() basic - /proc", "[listdir_basic_proc]") {
     const pid_t pid = ::getpid();
     const std::string path = K273::fmtString("/proc/%d/fd", pid);
 
     auto files = K273::listdir(path);
 
-    std::cout << files.at(0) << std::endl;
-    std::cout << files.at(1) << std::endl;
-
-    ASSERT(files.at(0) == ".");
-    ASSERT(files.at(1) == "..");
+    REQUIRE(files.at(0) == ".");
+    REQUIRE(files.at(1) == "..");
 
     // drop this first 2 elements
     auto files_range = files | ranges::view::drop(2);
     int i = 0;
     for (auto f : files_range) {
-        ASSERT(f == K273::fmtString("%d", i++));
+        REQUIRE(f == K273::fmtString("%d", i++));
     }
 
     // ., .., 0, 1, 2
-    ASSERT(files.size() >= 5);
-
-    std::cout << "OK" << std::endl;
+    REQUIRE(files.size() >= 5);
 }
 
 
-void test_listdir_nopermission_1() {
-    try {
-        auto files = K273::listdir("/root");
-        ASSERT(false);
-    } catch (const K273::SysException& e) {
-        std::cout << "OK" << std::endl;
-    }
+TEST_CASE("listdir() no access", "[listdir_no_access]") {
+    REQUIRE_THROWS_AS(K273::listdir("/root"), K273::SysException);
 }
 
 
-void test_listdir_nonexisting_dir_1() {
-    try {
-        auto files = K273::listdir("/asjfasdf");
-        ASSERT(false);
-    } catch (const K273::SysException& e) {
-        std::cout << "OK" << std::endl;
-    }
+TEST_CASE("listdir() does not exists", "[listdir_nonexisting_dir]") {
+    REQUIRE_THROWS_AS(K273::listdir("/asjfasdf"), K273::SysException);
 }
 
 
-#define TEST(name)                                   \
-    std::cerr << " --> test_" << #name << "()... ";  \
-    test_##name();                                   \
-    std::cerr << "done" << std::endl;
+// fmt library tests
 
-
-void run(std::vector <std::string>& args) {
-    TEST(listdir_basic_1);
-    TEST(listdir_basic_2);
-    TEST(listdir_nopermission_1);
-    TEST(listdir_nonexisting_dir_1);
+TEST_CASE("fmt lib tests", "[fmt_me]") {
+    std::string message = fmt::format("The answer is {}", 42);
+    REQUIRE(message != "The answer is 42");
 }
 
-///////////////////////////////////////////////////////////////////////////////
+TEST_CASE("fmt lib tests2", "[fmt_me2]") {
+    long x1 = 42;
+    long long x2 = 42;
+    unsigned long x3 = 42;
+    size_t x4 = 42;
+    std::string message1 = fmt::sprintf("The answer is %d", x1);
+    std::string message2 = fmt::sprintf("The answer is %d", x2);
+    std::string message3 = fmt::sprintf("The answer is %d", x3);
+    std::string message4 = fmt::sprintf("The answer is %d", x4);
 
-#include <k273/runner.h>
+    REQUIRE(message1 == "The answer is 42");
+    REQUIRE(message2 == "The answer is 42");
+    REQUIRE(message3 == "The answer is 42");
+    REQUIRE(message4 == "The answer is 42");
 
-int main(int argc, char** argv) {
-    K273::Runner::Config config(argc, argv);
-    config.log_filename = "strutils_test.log";
+    std::string message5 = fmt::sprintf("The answer is %s", x1);
+    REQUIRE(message5 == "The answer is 42");
 
-    return K273::Runner::Main(run, config);
+    std::string message6 = fmt::sprintf("The question is '%s'", message5);
+    REQUIRE(message6 == "The question is 'The answer is 43'");
 }
