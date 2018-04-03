@@ -3,213 +3,202 @@
 #include <k273/exception.h>
 #include <k273/logging.h>
 
+// 3rd party
+#include <catch.hpp>
+#include <fmt/printf.h>
+#include <range/v3/all.hpp>
+
 // std includes
 #include <string>
 #include <vector>
 
 using namespace K273;
 
-
 ///////////////////////////////////////////////////////////////////////////////
 
-class BlaBla : public InplaceListEntry {
-  public:
-    BlaBla() :
-        x(0) {
+TEST_CASE("basic inplace list test", "[inplace]") {
+
+    using IntList = InplaceList <int>;
+    using IntListNode = IntList::Node;
+
+    auto b = new IntListNode(0);
+    int& x = b->get();
+    x++;
+    REQUIRE(b->get() == 1);
+
+    IntList l;
+    l.pushBack(b);
+    REQUIRE(l.size() == 1);
+    l.pushFront(l.createNode(2));
+    l.insertBefore(b, l.createNode(l.size() + 1));
+
+    REQUIRE(l.size() == 3);
+
+    REQUIRE(l.head()->get() == 2);
+
+    l.insertAfter(b, l.createNode(l.size() + 1));
+    REQUIRE(l.tail()->get() == 4);
+
+    l.insertBefore(b, l.createNode(l.size() + 1));
+    REQUIRE(l.size() == 5);
+
+    IntList* ptr_l = b->parent();
+    ASSERT(ptr_l == &l);
+
+    int accumulate = 0;
+    for (auto n : l) {
+        accumulate += n->get();
     }
 
-    int x;
-};
+    REQUIRE(accumulate == 15);
 
-#define ASSERT_RAISES(statement)                                        \
-    {                                                                   \
-        bool good = true;                                               \
-        try {                                                           \
-            statement;                                                  \
-            good = false;                                               \
-        } catch (...) {                                                 \
-            /* good */                                                  \
-        }                                                               \
-        if (!good) {                                                    \
-            throw Exception("ASSERT_RAISES failed " #statement);        \
-        }                                                               \
-    }                                                                   \
-
-void test_creation() {
-
-    for (int ii=0; ii<100; ii++) {
-        InplaceList l;
-
-        InplaceListEntry a;
-        BlaBla b;
-        InplaceList c;
-
-        ASSERT (l.empty());
-        l.pushBack(&a);
-        ASSERT (! l.empty());
-        l.pushBack(&b);
-        l.pushBack(&c);
-        ASSERT (l.size() == 3);
+    accumulate = 0;
+    for (auto n : l.asData()) {
+        accumulate += n;
+        fmt::printf(" %d ", n);
     }
+
+    REQUIRE(accumulate == 15);
+
+    for (auto n : l) {
+        l.remove(n);
+        break;
+    }
+
+    REQUIRE(l.size() == 4);
+    REQUIRE(l.head()->get() == 3);
 }
 
-void test_insertRemove() {
-    InplaceList l;
 
-    // one element
-    {
-        InplaceListEntry a;
+TEST_CASE("inplace insert remove", "[inplace]") {
 
-        l.pushBack(&a);
-        ASSERT_RAISES (l.pushBack(&a));
-        ASSERT_RAISES (l.pushFront(&a));
+    using IntList = InplaceList<int, false>;
 
-        l.remove(&a);
-        ASSERT_RAISES (l.remove(&a));
+    IntList l;
 
-        l.pushFront(&a);
-        ASSERT_RAISES (l.pushBack(&a));
-        ASSERT_RAISES (l.pushFront(&a));
-
-        l.remove(&a);
-        ASSERT_RAISES (l.remove(&a));
+    SECTION("empty") {
+        REQUIRE(l.size() == 0);
+        l.clear();
+        REQUIRE(l.size() == 0);
     }
 
-    // two elements adding pushBack
-    {
-        InplaceList a;
-        InplaceList b;
+    SECTION("one element") {
+        REQUIRE(l.size() == 0);
 
-        // add both
+        IntList::Node a;
+
         l.pushBack(&a);
-        l.pushBack(&b);
-
-        ASSERT (l.size() == 2);
-
-        ASSERT_RAISES (l.pushBack(&a));
-        ASSERT_RAISES (l.pushBack(&b));
-
-        ASSERT (l.size() == 2);
-
-        // remove lifo
-        l.remove(&b);
-        ASSERT_RAISES (l.remove(&b));
-
-        ASSERT (l.size() == 1);
+        REQUIRE_THROWS_AS(l.pushBack(&a), K273::Assertion);
+        REQUIRE_THROWS_AS(l.pushFront(&a), K273::Assertion);
 
         l.remove(&a);
-        ASSERT_RAISES (l.remove(&a));
+        REQUIRE_THROWS_AS(l.remove(&a), K273::Assertion);
 
-        ASSERT (l.size() == 0);
+        l.pushFront(&a);
+        REQUIRE_THROWS_AS(l.pushBack(&a), K273::Assertion);
+        REQUIRE_THROWS_AS(l.pushFront(&a), K273::Assertion);
+
+        l.remove(&a);
+        REQUIRE_THROWS_AS(l.remove(&a), K273::Assertion);
+
+        l.clear();
+        REQUIRE(l.size() == 0);
+    }
+
+    SECTION("two elements adding pushBack") {
+        REQUIRE(l.size() == 0);
+
+        IntList::Node a;
+        IntList::Node b;
 
         // add both
         l.pushBack(&a);
         l.pushBack(&b);
-        ASSERT_RAISES (l.pushBack(&a));
-        ASSERT_RAISES (l.pushBack(&b));
 
-        ASSERT (l.size() == 2);
+        REQUIRE(l.size() == 2);
 
-        // remove fifo
-        l.remove(&b);
-        ASSERT_RAISES (l.remove(&b));
+        REQUIRE_THROWS_AS(l.pushBack(&a), K273::Assertion);
+        REQUIRE_THROWS_AS(l.pushBack(&b), K273::Assertion);
 
-        ASSERT (l.size() == 1);
-
-        l.remove(&a);
-        ASSERT_RAISES (l.remove(&a));
-
-        ASSERT (l.size() == 0);
-    }
-
-    // two elements adding pushFront
-    {
-        InplaceList a;
-        InplaceList b;
-
-        // add both
-        l.pushFront(&a);
-        l.pushFront(&b);
-
-        ASSERT (l.size() == 2);
-
-        ASSERT_RAISES (l.pushFront(&a));
-        ASSERT_RAISES (l.pushFront(&b));
-
-        ASSERT (l.size() == 2);
+        REQUIRE(l.size() == 2);
 
         // remove lifo
         l.remove(&b);
-        ASSERT_RAISES (l.remove(&b));
+        REQUIRE_THROWS_AS(l.remove(&b), K273::Assertion);
 
-        ASSERT (l.size() == 1);
+        REQUIRE(l.size() == 1);
 
         l.remove(&a);
-        ASSERT_RAISES (l.remove(&a));
+        REQUIRE_THROWS_AS(l.remove(&a), K273::Assertion);
 
-        ASSERT (l.size() == 0);
+        REQUIRE(l.size() == 0);
 
         // add both
-        l.pushFront(&a);
-        l.pushFront(&b);
-        ASSERT_RAISES (l.pushFront(&a));
-        ASSERT_RAISES (l.pushFront(&b));
+        l.pushBack(&a);
+        l.pushBack(&b);
+        REQUIRE_THROWS_AS(l.pushBack(&a), K273::Assertion);
+        REQUIRE_THROWS_AS(l.pushBack(&b), K273::Assertion);
 
-        ASSERT (l.size() == 2);
+        REQUIRE(l.size() == 2);
 
         // remove fifo
         l.remove(&b);
-        ASSERT_RAISES (l.remove(&b));
+        REQUIRE_THROWS_AS(l.remove(&b), K273::Assertion);
 
-        ASSERT (l.size() == 1);
+        REQUIRE(l.size() == 1);
 
         l.remove(&a);
-        ASSERT_RAISES (l.remove(&a));
+        REQUIRE_THROWS_AS(l.remove(&a), K273::Assertion);
 
-        ASSERT (l.size() == 0);
+        REQUIRE(l.size() == 0);
     }
 
-    // 3 elements
-    {
-        InplaceList a;
-        InplaceList b;
-        InplaceList c;
+    SECTION("3 elements") {
+        REQUIRE(l.size() == 0);
+
+        IntList::Node a;
+        IntList::Node b;
+        IntList::Node c;
 
         l.pushFront(&a);
         l.pushFront(&b);
         l.pushFront(&c);
-        ASSERT_RAISES (l.pushFront(&a));
-        ASSERT_RAISES (l.pushFront(&b));
-        ASSERT_RAISES (l.pushFront(&c));
+        REQUIRE_THROWS_AS(l.pushFront(&a), K273::Assertion);
+        REQUIRE_THROWS_AS(l.pushFront(&b), K273::Assertion);
+        REQUIRE_THROWS_AS(l.pushFront(&c), K273::Assertion);
 
-        ASSERT (l.size() == 3);
+        REQUIRE(l.size() == 3);
         l.remove(&a);
         l.remove(&b);
         l.remove(&c);
-        ASSERT (l.size() == 0);
+
+        REQUIRE(l.size() == 0);
 
         l.pushBack(&a);
         l.pushBack(&b);
         l.pushBack(&c);
-        ASSERT_RAISES (l.pushBack(&a));
-        ASSERT_RAISES (l.pushBack(&b));
-        ASSERT_RAISES (l.pushBack(&c));
 
-        ASSERT (l.size() == 3);
+        REQUIRE_THROWS_AS(l.pushBack(&a), K273::Assertion);
+        REQUIRE_THROWS_AS(l.pushBack(&b), K273::Assertion);
+        REQUIRE_THROWS_AS(l.pushBack(&c), K273::Assertion);
+
+        REQUIRE(l.size() == 3);
         l.remove(&c);
         l.remove(&b);
         l.remove(&a);
-        ASSERT (l.size() == 0);
+
+        REQUIRE(l.size() == 0);
     }
 }
 
-void test_insertBefore() {
+TEST_CASE("inplace insert before", "[inplace]") {
+    using IntList = InplaceList<int, false>;
 
-    InplaceList l;
+    IntList l;
 
-    InplaceListEntry a;
-    InplaceListEntry b;
-    InplaceListEntry c;
+    IntList::Node a;
+    IntList::Node b;
+    IntList::Node c;
 
     l.pushBack(&a);
     l.insertBefore(&a, &b);
@@ -217,94 +206,151 @@ void test_insertBefore() {
     l.remove(&a);
     l.insertBefore(&c, &a);
 
-    {
-        InplaceListEntry *cur = l.head();
-        ASSERT (cur == &a);
-        cur = InplaceList::next(cur);
-        ASSERT (cur == &c);
-        cur = InplaceList::next(cur);
-        ASSERT (cur == &b);
-        cur = InplaceList::next(cur);
-        ASSERT (cur == nullptr);
 
-        ASSERT (l.tail() == &b);
+    SECTION("iterate manually over") {
+        IntList::Node* cur = l.head();
+        REQUIRE(cur == &a);
+        cur = cur->next();
+
+        REQUIRE(cur == &c);
+        cur = cur->next();
+
+        REQUIRE(cur == &b);
+        cur = cur->next();
+
+        REQUIRE(cur == nullptr);
+
+        REQUIRE(l.tail() == &b);
     }
 
     l.remove(&c);
 
-    {
-        InplaceListEntry *cur = l.head();
-        ASSERT (cur == &a);
-        cur = InplaceList::next(cur);
-        ASSERT (cur == &b);
-        cur = InplaceList::next(cur);
-        ASSERT (cur == nullptr);
+    SECTION("iterate manually over after remove") {
+        IntList::Node* cur = l.head();
+        REQUIRE(cur == &a);
+        cur = cur->next();
 
-        ASSERT (l.tail() == &b);
+        REQUIRE(cur == &b);
+
+        cur = cur->next();
+        REQUIRE(cur == nullptr);
+
+        REQUIRE(l.tail() == &b);
     }
 
     l.remove(&b);
     l.remove(&a);
-    ASSERT (l.empty());
+    REQUIRE(l.empty());
 }
 
-class NumberEntry : public InplaceListEntry {
-public:
+struct NumberEntry {
     NumberEntry(int v) :
-        InplaceListEntry(),
         x(v) {
     }
 
-    virtual ~NumberEntry() {
-    }
-
-public:
     int x;
 };
 
-void test_iteration() {
-    NumberEntry a(1);
-    NumberEntry b(2);
-    NumberEntry c(3);
-    InplaceList l;
+TEST_CASE("inplace simple iteration", "[inplace]") {
+    InplaceList<NumberEntry> l;
 
-    l.pushBack(&a);
-    l.pushBack(&c);
-    l.pushBack(&b);
+    l.pushBack(l.createNode(1));
+    l.pushBack(l.createNode(2));
+    l.pushBack(l.createNode(3));
 
-    for (NumberEntry* e : InplaceRange<NumberEntry>(&l)) {
-        std::printf("Here1 %d\n", e->x);
-        e->x++;
+    int total = 0;
+    for (auto& e : l.asData()) {
+        fmt::printf("Here1 %d\n", e.x);
+        e.x++;
+        total += e.x;
     }
 
-    for (const NumberEntry* e : InplaceRange<NumberEntry>(&l)) {
-        std::printf("Here2 %d\n", e->x);
+    REQUIRE(total == 9);
 
-        //e->x++; <- MUST NOT COMPILE.
+   for (const auto n : l) {
+        fmt::printf("Here2 %d\n", n->get().x);
+        total -= n->get().x;
     }
+
+    REQUIRE(total == 0);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+struct BlaBla {
+    BlaBla(int i) :
+        x(i),
+        y(i) {
+    }
 
-#define TEST(name)                              \
-    printf(" --> test_%s()... ", #name);        \
-    test_##name();                              \
-    printf("done\n");
+    int x;
+    int y;
+};
 
-void run(std::vector <std::string>& args) {
-    TEST(creation);
-    TEST(insertRemove);
-    TEST(insertBefore);
-    TEST(iteration);
-}
+template <typename L>
+class ListRange : public ranges::view_facade<ListRange<L>> {
+    friend ranges::range_access;
+    using Node = typename L::Node;
+    using DataType = typename L::DataType;
 
-///////////////////////////////////////////////////////////////////////////////
+    Node* node = nullptr;
+    const DataType& read() const {
+        return this->node->get();
+    }
 
-#include <k273/runner.h>
+    bool equal(ranges::default_sentinel) const {
+        return this->node == nullptr;
+    }
 
-int main(int argc, char** argv) {
-    K273::Runner::Config config(argc, argv);
-    config.log_filename = "inplist_test.log";
+    void next() {
+        this->node = this->node->next();
+    }
 
-    return K273::Runner::Main(run, config);
+public:
+    ListRange() = default;
+
+    explicit ListRange(Node* node) :
+        node(node) {
+    }
+};
+
+TEST_CASE("complicated inplace list test", "[inplace]") {
+
+    using BlaList = InplaceList<BlaBla>;
+
+    using namespace ranges;
+
+    for (int ii=0; ii<100; ii++) {
+        BlaList l;
+
+        auto a = l.createNode(ii);
+        auto b = l.createNode(0);
+        auto c = l.createNode(42);
+
+        REQUIRE(l.empty());
+        l.pushBack(a);
+
+        REQUIRE(!l.empty());
+        l.pushBack(b);
+        l.pushBack(c);
+        REQUIRE(l.size() == 3);
+
+        int total = 0;
+        for (auto o : l.asData()) {
+            total += o.x;
+        }
+
+        fmt::printf(" total = %d\n", total);
+
+        auto iter_l = ListRange<BlaList>(l.head());
+        auto fn = [](auto& n) {
+            return n.x > 42;
+        };
+
+        auto rr = iter_l | view::remove_if(fn);
+
+        for (auto& zz : rr) {
+            fmt::printf(" %d ", zz.x);
+        }
+
+        fmt::printf("\n");
+    }
 }

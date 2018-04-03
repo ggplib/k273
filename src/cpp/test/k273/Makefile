@@ -6,12 +6,13 @@ LIBS = -L $(K273_PATH)/src/cpp/k273 -lk273
 INCLUDE_PATHS += -I $(K273_PATH)/3rd/cpp
 INCLUDE_PATHS += -I $(K273_PATH)/3rd/cpp/range-v3/include
 INCLUDE_PATHS += -I $(K273_PATH)/3rd/cpp/fmt-4.1.0
+#INCLUDE_PATHS += -I $(K273_PATH)/3rd/cpp/itertools
 
 CATCH2_BIN = catch2
-CATCH2_SRCS = strutils_test.cpp catch2_runner.cpp
+CATCH2_SRCS = strutils_test.cpp inplist_test.cpp catch2_runner.cpp
 CATCH2_OBJS = $(patsubst %.cpp, %.o, $(CATCH2_SRCS))
 
-OTHER_BINS = inplist_test.bin exception_test.bin
+OTHER_BINS = exception_test.bin
 OTHER_OBJS := $(OTHER_BINS:.bin=.o)
 
 DEPS = $(CATCH2_OBJS:.o=.d) $(OTHER_OBJS:.o=.d)

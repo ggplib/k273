@@ -1,7 +1,7 @@
 include $(K273_PATH)/src/cpp/Makefile.in
 
 SRCS += exception.cpp logging.cpp util.cpp strutils.cpp stacktrace.cpp json.cpp
-SRCS += inplist.cpp parseargs.cpp
+SRCS += parseargs.cpp other.cpp
 
 OBJS = $(patsubst %.cpp, %.o, $(SRCS))
 DEPS = $(SRCS:.cpp=.d)
