@@ -104,6 +104,10 @@ namespace K273 {
             this->node_count++;
         }
 
+        template<class ... Types> void emplaceBack(Types ... args) {
+            this->pushBack(new Node(args ...));
+        }
+
         void pushFront(Node* new_node) {
             if (this->head_node == nullptr) {
                 this->pushBack(new_node);

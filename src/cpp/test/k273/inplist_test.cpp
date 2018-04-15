@@ -354,3 +354,34 @@ TEST_CASE("complicated inplace list test", "[inplace]") {
         fmt::printf("\n");
     }
 }
+
+struct BlaX12 {
+    BlaX12(int x, int y) :
+        x(x),
+        y(y) {
+    }
+
+    int x;
+    int y;
+};
+
+TEST_CASE("inplace emplace", "[inplace]") {
+
+    using IntList = InplaceList <int>;
+    using IntListNode = IntList::Node;
+
+    using BlaList = InplaceList<BlaX12>;
+
+    IntList l;
+    l.pushBack(new IntListNode(1));
+    l.emplaceBack(42);
+    REQUIRE(!l.empty());
+    REQUIRE(l.size() == 2);
+
+    BlaList l2;
+
+    l2.pushBack(l2.createNode(42, 24));
+    l2.emplaceBack(75, 23);
+    REQUIRE(!l2.empty());
+    REQUIRE(l2.size() == 2);
+}
