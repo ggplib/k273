@@ -321,7 +321,7 @@ namespace K273 {
                 return dataIterator(nullptr);
             }
 
-            private:
+        private:
             InplaceList* ourself;
         };
 
