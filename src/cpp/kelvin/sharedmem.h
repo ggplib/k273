@@ -8,7 +8,7 @@
 
 namespace Kelvin {
 
-    class SharedMemory : public K273::NonCopyable {
+    class SharedMemory {
       public:
         // Will create / recrete if exists.  Takes ownership if creates and if so: destructor
         // responsbile for cleaning up

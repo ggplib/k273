@@ -15,7 +15,7 @@ all: $(OBJS) $(LIB_NAME)
 
 # Compiles
 $(LIB_NAME): $(OBJS)
-	$(CPP) -shared $(CORE_OBJS) $(LDFLAGS) -L $(LIB_PATH) -pthread -lrt -o $@
+	$(CPP) -shared $(OBJS) $(LDFLAGS) -L $(LIB_PATH) -pthread -lrt -o $@
 
 %.o : %.cpp
 	$(CPP) $(INCLUDE_PATHS) $(CFLAGS_FORLIBS) -c -o $@ $<
