@@ -37,7 +37,7 @@ const static int LOG_PRINT_SPACE = LOG_BUFFER_SIZE - LogHandlerBase::PrefixLengt
 thread_local char static_log_buffer[LOG_BUFFER_SIZE];
 
 
-static const char* getLevelName(int level) {
+static const char* getLevelName(LogLevel level) {
     switch(level) {
     case Logger::LOG_CRITICAL:
         return " [CRITICAL]  ";
@@ -58,7 +58,7 @@ static const char* getLevelName(int level) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-LogHandlerBase::LogHandlerBase(int level) :
+LogHandlerBase::LogHandlerBase(LogLevel level) :
     level(level) {
 }
 
@@ -70,7 +70,8 @@ void LogHandlerBase::cleanup() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-FileLogHandler::FileLogHandler(int level, const string& filename, bool coloured) :
+FileLogHandler::FileLogHandler(LogLevel level, const string& filename,
+                               bool coloured) :
     LogHandlerBase(level),
     coloured(true) {
     this->fp = std::fopen(filename.c_str(), "a");
@@ -82,7 +83,8 @@ FileLogHandler::FileLogHandler(int level, const string& filename, bool coloured)
 FileLogHandler::~FileLogHandler() {
 }
 
-void FileLogHandler::onReport(Logger& logger, string& timestamp, int level, const char* pt_msg) {
+void FileLogHandler::onReport(Logger& logger, string& timestamp,
+                              LogLevel level, const char* pt_msg) {
     const char* pt_colour_on = nullptr;
     const char* pt_colour_off = nullptr;
 
@@ -140,7 +142,7 @@ void FileLogHandler::cleanup() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-ConsoleLogHandler::ConsoleLogHandler(int level) :
+ConsoleLogHandler::ConsoleLogHandler(LogLevel level) :
     LogHandlerBase(level) {
     this->coloured = std::getenv("K273_LOG_NO_COLOR") != nullptr ? false : isatty(fileno(stderr));
 }
@@ -148,7 +150,8 @@ ConsoleLogHandler::ConsoleLogHandler(int level) :
 ConsoleLogHandler::~ConsoleLogHandler() {
 }
 
-void ConsoleLogHandler::onReport(Logger& logger, string& timestamp, int level, const char* pt_msg) {
+void ConsoleLogHandler::onReport(Logger& logger, string& timestamp,
+                                 LogLevel level, const char* pt_msg) {
     const char* pt_colour_on = nullptr;
     const char* pt_colour_off = nullptr;
 
@@ -212,7 +215,7 @@ Logger::~Logger() {
     this->cleanup();
 }
 
-void Logger::fileLogging(const std::string& filename, int level) {
+void Logger::fileLogging(const std::string& filename, LogLevel level) {
     if (this->file_handler != nullptr) {
         this->removeHandler(this->file_handler);
         this->file_handler = nullptr;
@@ -222,7 +225,7 @@ void Logger::fileLogging(const std::string& filename, int level) {
     this->addHandler(this->file_handler);
 }
 
-void Logger::consoleLogging(int level) {
+void Logger::consoleLogging(LogLevel level) {
     if (this->console_handler != nullptr) {
         this->removeHandler(this->console_handler);
         this->console_handler = nullptr;
@@ -262,7 +265,7 @@ void Logger::cleanup() {
     this->handlers.clear();
 }
 
-void Logger::makeLog(int level, const char* fmt, va_list args) {
+void Logger::makeLog(LogLevel level, const char* fmt, va_list args) {
     std::lock_guard<std::mutex> lk(this->mutex);
 
      // copy level name
@@ -289,7 +292,7 @@ void Logger::makeLog(int level, const char* fmt, va_list args) {
     this->doLog(level, static_log_buffer);
 }
 
-void Logger::makeLog(int level, const string& msg) {
+void Logger::makeLog(LogLevel level, const string& msg) {
     std::lock_guard<std::mutex> lk(this->mutex);
 
      // copy level name
@@ -314,7 +317,7 @@ void Logger::makeLog(int level, const string& msg) {
     this->doLog(level, static_log_buffer);
 }
 
-void Logger::doLog(int level, const char* pt_msg) {
+void Logger::doLog(LogLevel level, const char* pt_msg) {
     // XXX this could easily be reduced to one static buffer and no strings
 
     bool do_log_this_time = false;
@@ -375,7 +378,7 @@ void Logger::doLog(int level, const char* pt_msg) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void K273::loggerSetup(const string& filename, int console_level) {
+void K273::loggerSetup(const string& filename, LogLevel console_level) {
     ::getLogger().fileLogging(filename);
     ::getLogger().consoleLogging(console_level);
 

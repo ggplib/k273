@@ -27,11 +27,12 @@ namespace K273::Runner {
 
         std::vector <std::string> args;
         std::string log_filename;
+        LogLevel console_level = K273::Logger::LOG_DEBUG;
     };
 
     template <typename F> int Main(F f, Config& config) {
 
-        K273::loggerSetup(config.log_filename, K273::Logger::LOG_DEBUG);
+        K273::loggerSetup(config.log_filename, config.console_level);
 
         try {
             f(config.args);

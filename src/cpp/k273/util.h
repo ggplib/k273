@@ -13,12 +13,45 @@
 
 namespace K273 {
 
-    // just messing around
-    template <int k>
-    inline int round_up(int x) {
-        int z = (x / k) * k;
-        int cond = x != z;
-        return z + cond * k;
+    // from: http://the-witness.net/news/2012/11/scopeexit-in-c11/
+    template <typename F>
+    class ScopeExit {
+        ScopeExit(F f) :
+            f(f) {
+        }
+
+        ~ScopeExit() {
+            f();
+        }
+    private:
+        F f;
+    };
+
+    template <typename F>
+    ScopeExit<F> makeScopeExit(F f) {
+        return ScopeExit<F>(f);
+    };
+
+#define STRING_JOIN2(arg1, arg2) DO_STRING_JOIN2(arg1, arg2)
+#define DO_STRING_JOIN2(arg1, arg2) arg1 ## arg2
+
+#define SCOPE_EXIT(statement) \
+    auto STRING_JOIN2(scope_exit_, __LINE__) = makeScopeExit([=]() {statement;})
+
+
+    namespace Align {
+        // just messing around
+        template <typename T>
+        T up(T x, T k) {
+            T z = (x / k) * k;
+            bool cond = x != z;
+            return z + cond * k;
+        }
+
+        template <typename T>
+        T down(T x, T k) {
+            return (x / k) * k;
+        }
     }
 
     inline void cpuRelax() {

@@ -10,6 +10,8 @@
 
 namespace K273 {
 
+    using LogLevel = int;
+
     class Logger;
 
     ///////////////////////////////////////////////////////////////////////////
@@ -20,28 +22,28 @@ namespace K273 {
         enum { PrefixLength = 13 };
 
     public:
-        LogHandlerBase(int level);
+        LogHandlerBase(LogLevel level);
         virtual ~LogHandlerBase();
 
     public:
         virtual void onReport(Logger& logger, std::string& timestamp,
-                              int level, const char* pt_msg) = 0;
+                              LogLevel level, const char* pt_msg) = 0;
         virtual void cleanup();
 
     public:
-        int level;
+        LogLevel level;
     };
 
     ///////////////////////////////////////////////////////////////////////////
 
     class FileLogHandler: public LogHandlerBase {
     public:
-        FileLogHandler(int level, const std::string& filename, bool coloured);
+        FileLogHandler(LogLevel level, const std::string& filename, bool coloured);
         virtual ~FileLogHandler();
 
     public:
         void onReport(Logger& logger, std::string& timestamp,
-                      int level, const char* pt_msg);
+                      LogLevel level, const char* pt_msg);
         void cleanup();
 
     private:
@@ -53,12 +55,12 @@ namespace K273 {
 
     class ConsoleLogHandler: public LogHandlerBase {
     public:
-        ConsoleLogHandler(int level);
+        ConsoleLogHandler(LogLevel level);
         virtual ~ConsoleLogHandler();
 
     public:
         void onReport(Logger& logger, std::string& timestamp,
-                      int level, const char* pt_msg);
+                      LogLevel level, const char* pt_msg);
 
     private:
         bool coloured;
@@ -70,33 +72,33 @@ namespace K273 {
     class Logger {
     public:
         // don't log
-        static constexpr int LOG_NONE = 1;
+        static constexpr LogLevel LOG_NONE = 1;
 
         // critical conditions
-        static constexpr int LOG_CRITICAL = 2;
+        static constexpr LogLevel LOG_CRITICAL = 2;
 
         // error conditions
-        static constexpr int LOG_ERROR = 3;
+        static constexpr LogLevel LOG_ERROR = 3;
 
         // warning conditions
-        static constexpr int LOG_WARNING = 4;
+        static constexpr LogLevel LOG_WARNING = 4;
 
         // informational
-        static constexpr int LOG_INFO = 5;
+        static constexpr LogLevel LOG_INFO = 5;
 
         // debug-level
-        static constexpr int LOG_DEBUG = 6;
+        static constexpr LogLevel LOG_DEBUG = 6;
 
         // verbose debug-level
-        static constexpr int LOG_VERBOSE = 7;
+        static constexpr LogLevel LOG_VERBOSE = 7;
 
     public:
         Logger();
         ~Logger();
 
     public:
-        void fileLogging(const std::string& msg, int level=Logger::LOG_VERBOSE);
-        void consoleLogging(int level=Logger::LOG_VERBOSE);
+        void fileLogging(const std::string& msg, LogLevel level=Logger::LOG_VERBOSE);
+        void consoleLogging(LogLevel level=Logger::LOG_VERBOSE);
 
         // admin api
         void addHandler(LogHandlerBase* handle);
@@ -105,11 +107,11 @@ namespace K273 {
         void cleanup();
 
         // logging api
-        void makeLog(int level, const char* fmt, va_list args);
-        void makeLog(int level, const std::string& msg);
+        void makeLog(LogLevel level, const char* fmt, va_list args);
+        void makeLog(LogLevel level, const std::string& msg);
 
     private:
-        void doLog(int level, const char* pt_msg);
+        void doLog(LogLevel level, const char* pt_msg);
 
     private:
         int seconds;
@@ -127,7 +129,7 @@ namespace K273 {
 
     ///////////////////////////////////////////////////////////////////////////
 
-    void loggerSetup(const std::string& filename, int console_level);
+    void loggerSetup(const std::string& filename, LogLevel console_level);
 
     void addLogHandler(LogHandlerBase* handler);
     void removeLogHandler(LogHandlerBase* handler);
