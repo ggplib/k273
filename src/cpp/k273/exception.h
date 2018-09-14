@@ -72,6 +72,8 @@ namespace K273 {
 
 #include "k273/util.h"
 
+// XXX this should just format a string... and be only one...
+
 #define ASSERT(expr)                                            \
     if (unlikely(!(expr))) {                                    \
         throw K273::Assertion(__LINE__,                         \

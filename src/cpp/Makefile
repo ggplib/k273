@@ -13,6 +13,7 @@ fresh : clean all install
 libs:
 	echo "*** libs"
 	$(MAKE) -C k273 $(BUILD_CORES) all
+	$(MAKE) -C greenlet $(BUILD_CORES) all
 	$(MAKE) -C kelvin $(BUILD_CORES) all
 	$(MAKE) -C orbit $(BUILD_CORES) all
 
@@ -20,12 +21,14 @@ install: libs
 	echo "*** install"
 	$(MKDIR) $(INSTALL_LIB_PATH)
 	$(MAKE) -C k273 install
+	$(MAKE) -C greenlet install
 	$(MAKE) -C kelvin install
 	$(MAKE) -C orbit install
 
 clean:
 	echo "*** clean-libs"
 	$(MAKE) -C k273 clean
+	$(MAKE) -C greenlet clean
 	$(MAKE) -C kelvin clean
 	$(MAKE) -C orbit clean
 
