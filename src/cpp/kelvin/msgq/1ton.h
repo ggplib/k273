@@ -254,9 +254,6 @@ namespace Kelvin::MsgQ::OneToMany {
         const size_t queue_size;
         const size_t memory_size;
 
-        // pointer to first reserved block (used by consumer/producer)
-        const CacheLine* reserved;
-
         // internal consume index (only used be reader)
         size_t internal_consume_index;
     };

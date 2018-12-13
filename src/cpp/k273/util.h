@@ -113,6 +113,7 @@ namespace K273 {
     // this is a thread safe queue...  it is used to communicate back from worker threads, to
     // caller threads safely.  It was this crudest implementation to get things up and running.
     // However, it seems very, very fast...  So no point optimizing for the sake of it, right now.
+ #pragma GCC diagnostic ignored "-Wunused-private-field"
 
     class SpinLock {
     public:
@@ -134,6 +135,8 @@ namespace K273 {
         std::atomic <bool> locked;
         char padding_buf[64 - sizeof(std::atomic<bool>)];
     };
+
+ #pragma GCC diagnostic warning "-Wunused-private-field"
 
     class SpinLockGuard {
     public:

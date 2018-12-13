@@ -42,7 +42,7 @@ namespace K273::Orbit {
         std::string orbit_name;
 
         uint32_t poll_type;
-        uint32_t number_of_channels;
+        //XXX uint32_t number_of_channels;
 
         // used when we recieve handleInitialiseClient
         DEFERRED(Initialiser, Connector, onInitialise);

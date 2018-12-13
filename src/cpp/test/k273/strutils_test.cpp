@@ -59,7 +59,7 @@ TEST_CASE("listdir() does not exists", "[listdir_nonexisting_dir]") {
 
 TEST_CASE("fmt lib tests", "[fmt_me]") {
     std::string message = fmt::format("The answer is {}", 42);
-    REQUIRE(message != "The answer is 42");
+    REQUIRE(message == "The answer is 42");
 }
 
 TEST_CASE("fmt lib tests2", "[fmt_me2]") {
@@ -81,5 +81,5 @@ TEST_CASE("fmt lib tests2", "[fmt_me2]") {
     REQUIRE(message5 == "The answer is 42");
 
     std::string message6 = fmt::sprintf("The question is '%s'", message5);
-    REQUIRE(message6 == "The question is 'The answer is 43'");
+    REQUIRE(message6 == "The question is 'The answer is 42'");
 }

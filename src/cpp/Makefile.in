@@ -15,11 +15,14 @@ ifdef CPP_VERSION
 CPP = $(CPP_VERSION)
 else
 CPP = g++
+CPP = clang++
 endif
 
 # profiles -pg, verbose -v
 
-CFLAGS = -fmax-errors=5 -MMD -MP -g -Wall -Werror -Woverloaded-virtual -Wnon-virtual-dtor -O3 -fomit-frame-pointer -march=native -mtune=native -std=c++17
+#CFLAGS += -fmax-errors=5
+
+CFLAGS = -MMD -MP -g -Wall -Werror -Woverloaded-virtual -Wnon-virtual-dtor -O3 -fomit-frame-pointer -march=native -mtune=native -std=c++17
 LDFLAGS = -g -MMD -MP -Wall -Werror -O3 -fomit-frame-pointer -march=native -mtune=native -pthread -lrt
 
 CFLAGS_FORLIBS = $(CFLAGS) -fPIC

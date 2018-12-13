@@ -30,12 +30,14 @@ namespace Kelvin::Streamer {
     ///////////////////////////////////////////////////////////////////////////
     // some trickery here with inheritance.  This is to avoid ServerProtocol
 
-    struct ConfigInterface {
+    class ConfigInterface {
+    public:
         ConfigInterface(Scheduler*, AcceptingSocket*, int backlog);
         virtual ~ConfigInterface();
 
         virtual ChildProtocol* createChild(Server*, ConnectedSocket* new_sock) const = 0;
 
+    public:
         Scheduler* scheduler;
         AcceptingSocket* accept_sock;
         int backlog;
