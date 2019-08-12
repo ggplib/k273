@@ -258,17 +258,4 @@ namespace K273 {
         std::unique_ptr<std::thread> the_thread;
     };
 
-    // Simple non-copyable base (XXX why do this - just use = delete, seems cleaner).
-    class NonCopyable {
-    protected:
-        NonCopyable() {
-        }
-
-        ~NonCopyable() {
-        }
-
-    private:
-        NonCopyable(const NonCopyable &) = delete;
-        NonCopyable& operator= (const NonCopyable &) = delete;
-    };
 }
