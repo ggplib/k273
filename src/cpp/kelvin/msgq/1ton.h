@@ -35,7 +35,7 @@ namespace Kelvin::MsgQ::OneToMany {
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    class Memory : K273::NonCopyable {
+    class Memory {
     public:
         // modulo 2 calculations:
         // basically as long as QUEUE_SIZE is of power of 2, the following works
@@ -68,7 +68,7 @@ namespace Kelvin::MsgQ::OneToMany {
     // prevent such a client falling so far behind that it breaks, is having an
     // sufficiently large queue.
 
-    class Producer : K273::NonCopyable {
+    class Producer {
 
     public:
         Producer(const size_t queue_size) :
@@ -180,7 +180,7 @@ namespace Kelvin::MsgQ::OneToMany {
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    class Consumer : K273::NonCopyable {
+    class Consumer {
 
     public:
         Consumer(const size_t queue_size) :

@@ -34,7 +34,7 @@ namespace Kelvin::MsgQ::ManyToOne {
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    class Memory : K273::NonCopyable {
+    class Memory {
     public:
         CacheLine* getCacheLine(size_t index) {
             return this->buf + index;
@@ -62,7 +62,7 @@ namespace Kelvin::MsgQ::ManyToOne {
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    class Producer : K273::NonCopyable {
+    class Producer {
     public:
         Producer(const size_t queue_size) :
             mem(nullptr),
@@ -179,7 +179,7 @@ namespace Kelvin::MsgQ::ManyToOne {
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    class Consumer : K273::NonCopyable {
+    class Consumer {
 
     public:
         Consumer(const size_t queue_size) :
