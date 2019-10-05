@@ -1,7 +1,7 @@
 /*
- * This file is part of cgreenlet. CGreenlet is free software available
- * under the terms of the MIT license. Consult the file LICENSE that was
- * shipped together with this source file for the exact licensing terms.
+ * This file is part of cgreenlet. CGreenlet is free software available under the terms of the MIT
+ * license. Consult the file LICENSE that was shipped together with this source file for the exact
+ * licensing terms.
  *
  * Copyright (c) 2012 by the cgreenlet authors. See the file AUTHORS for a
  * full list.
