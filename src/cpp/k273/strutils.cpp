@@ -29,6 +29,7 @@ string K273::fmtString(const char *fmt, ...) {
 
     int res;
     res = ::vsnprintf(pt_fmted, 4096, fmt, args);
+
     if (res < 0) {
         /* shouldnt happen - well not on a os/x ... */
         va_end(args);
@@ -36,6 +37,9 @@ string K273::fmtString(const char *fmt, ...) {
 
     } else if (res > 4096) {
         /* not enough room, we'll just malloc it... should be special case */
+
+        // note need to reset args
+        va_start(args, fmt);
         res = ::vasprintf(&pt_fmted, fmt, args);
         if (res == -1) {
             va_end(args);

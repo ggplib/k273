@@ -49,13 +49,17 @@ namespace K273::Runner {
             return 1;
 
         } catch (const K273::Exception &exc) {
-            fprintf(stderr, "Assertion : %s\n", exc.getMessage().c_str());
+            fprintf(stderr, "Exception : %s\n", exc.getMessage().c_str());
             fprintf(stderr, "Stacktrace :\n%s\n", exc.getStacktrace().c_str());
             return 1;
 
+        } catch (std::exception& exc) {
+            K273::l_critical("std::exception What : %s", exc.what());
+            throw;
+
         } catch (...) {
-            fprintf(stderr, "Unknown exception caught\n");
-            return 1;
+            K273::l_critical("Unknown exception");
+            throw;
         }
 
         return 0;

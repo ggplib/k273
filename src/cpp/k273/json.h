@@ -40,7 +40,7 @@ namespace K273 {
     public:
         // default copying/assignment
         JsonValue(const JsonValue&) = default;
-        JsonValue& operator= (const JsonValue&) = default;
+        JsonValue& operator= (const JsonValue&) = delete;
 
         // checks:
         bool isArray() const;
