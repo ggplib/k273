@@ -180,8 +180,8 @@ void go(vector <string>& args) {
         double cur_time = get_time();
         if (cur_time > report_time) {
             l_debug("final stats : pings: %lu, request full %lu", ping_pong_count, request_full_count);
-            l_debug("latency pongs (min/avg/max) %f/%f/%f", gmin_ping/1000.0, gave_ping/1000.0, gmax_ping/1000.0);
-            l_debug("latency from server (min/avg/max) %f/%f/%f", gmin/1000.0, gave/1000.0, gmax/1000.0);
+            l_debug("latency pongs (min/avg/max) %.2f/%.2f/%.2f", gmin_ping/1000.0, gave_ping/1000.0, gmax_ping/1000.0);
+            l_debug("latency from server (min/avg/max) %.2f/%.2f/%.2f", gmin/1000.0, gave/1000.0, gmax/1000.0);
             report_time = cur_time + 5;
 
             gmin = ~0;
